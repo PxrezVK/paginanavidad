@@ -1,2 +1,0 @@
-# paginanavidad
-Pagina NAVIDAD Instituto
