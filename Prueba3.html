@@ -3,9 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!--VERSIÓN:1.0-->
-<!-- AUTOR: 2ºSMR (ABRAHAM FIGUEROE,HUGO FERNANDEZ,ANGEL PÉREZ)-->
-
 <title>Horario IES PIO BAROJA</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Quicksand:wght@500;700&family=Orbitron:wght@900&display=swap');
@@ -13,51 +10,53 @@
   /* --- 1. ESTILOS GENERALES Y FONDO --- */
   body {
     margin: 0;
-    padding: 20px;
+    padding: 0; /* Quitamos padding del body para que el header toque los bordes si es necesario */
     font-family: 'Quicksand', sans-serif;
     background-color: #f7fcfc;
-    /* Patrón de nieve suave */
     background-image: radial-gradient(#e0f7fa 10%, transparent 11%), radial-gradient(#e0f7fa 10%, transparent 11%);
     background-size: 60px 60px;
     background-position: 0 0, 30px 30px;
+    min-height: 100vh;
   }
 
+  /* Contenedor principal adaptable */
   .main-container {
-    max-width: 1100px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 1100px; /* Ancho por defecto (móvil/tablet) */
+    margin: 20px auto;
     background: white;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    overflow: hidden;
-    border: 3px solid #C62828; /* Borde rojo navideño */
+    overflow: hidden; /* Mantiene bordes redondeados */
+    border: 3px solid #C62828;
+    display: flex;
+    flex-direction: column;
   }
 
-  /* --- 2. CABECERA (Títulos) --- */
+  /* --- 2. CABECERA (Títulos) - AHORA FIJA --- */
   .header-section {
     background: #C62828;
-    padding: 20px 10px 10px 10px;
+    padding: 15px 10px;
     text-align: center;
-    position: relative;
-    overflow: hidden;
+    position: sticky; /* HACE QUE SE QUEDE FIJA */
+    top: 0;
+    z-index: 1000; /* Asegura que esté por encima del contenido al hacer scroll */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Sombra para resaltar que flota */
   }
-  /* Decoración dorada superior */
+  
   .header-section::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
     background: repeating-linear-gradient(45deg, #FFD700, #FFD700 10px, #FDB813 10px, #FDB813 20px);
   }
 
-  /* SVG para texto curvado */
   .curved-title-svg {
     width: 100%;
-    max-width: 500px;
+    max-width: 400px; /* Un poco más pequeño para ahorrar espacio vertical */
     height: auto;
-    margin: 0 auto;
     display: block;
-    overflow: visible;
+    margin: 0 auto;
   }
-  .curved-text-path {
-      fill: transparent;
-  }
+  .curved-text-path { fill: transparent; }
   .curved-text {
       fill: white;
       font-family: 'Mountains of Christmas', cursive;
@@ -66,18 +65,17 @@
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
   }
 
-  /* Subtítulo Llamativo */
   .subtitle-striking {
-    font-family: 'Orbitron', sans-serif; /* Fuente tech/llamativa */
-    color: #FFD700; /* Dorado */
-    font-size: 1.5em;
-    margin: 5px 0 15px 0;
+    font-family: 'Orbitron', sans-serif;
+    color: #FFD700;
+    font-size: 1.3em;
+    margin: 5px 0 5px 0;
     text-transform: uppercase;
     letter-spacing: 2px;
     text-shadow: 2px 2px 0px #7f0000;
   }
   
-  /* --- 3. BARRA DE FILTRADO Y BÚSQUEDA --- */
+  /* --- 3. BARRA DE FILTRADO --- */
   .filter-bar {
     background-color: #fff;
     padding: 15px;
@@ -96,132 +94,170 @@
   }
 
   .filter-label {
-    font-size: 0.85em;
+    font-size: 0.8em;
     font-weight: bold;
     color: #C62828;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
   }
 
   .filter-control {
-    padding: 10px;
+    padding: 8px;
     border: 2px solid #eee;
     border-radius: 8px;
     font-family: 'Quicksand', sans-serif;
-    font-size: 0.95em;
     outline: none;
     transition: border-color 0.3s;
+    width: 100%;
+    box-sizing: border-box; /* Asegura que el padding no rompa el ancho */
   }
-  .filter-control:focus {
-    border-color: #C62828;
-  }
+  .filter-control:focus { border-color: #C62828; }
 
-  /* --- 4. GRID DEL HORARIO (TABLA) --- */
+  /* --- 4. GRID DEL HORARIO --- */
   .schedule-grid {
     display: grid;
-    /* 3 columnas fijas: Horario, Actividad, Lugar */
-    grid-template-columns: 130px 1fr 1fr;
+    grid-template-columns: 110px 1fr 1fr; /* Ajustado */
     width: 100%;
   }
 
-  /* Encabezados del Grid */
-  .grid-header {
-    display: contents;
-  }
+  /* Header Verde de la Tabla */
+  .grid-header { display: contents; }
   .grid-header-cell {
-    background-color: #2E7D32; /* Verde Pino */
+    background-color: #2E7D32;
     color: white;
-    padding: 15px;
+    padding: 10px;
     font-weight: bold;
     text-transform: uppercase;
-    font-size: 0.9em;
+    font-size: 0.85em;
     border-right: 1px solid #1b5e20;
+    display: flex; align-items: center; justify-content: center;
   }
 
-  /* Filas de Datos (Gatillos del acordeón) */
-  .grid-row-trigger {
-    display: contents;
-    cursor: pointer;
-  }
+  /* Filas */
+  .grid-row-trigger { display: contents; cursor: pointer; }
   .grid-cell {
-    padding: 15px;
+    padding: 10px;
     border-bottom: 1px solid #eee;
     border-right: 1px solid #eee;
-    display: flex;
-    align-items: center;
+    display: flex; align-items: center;
     background-color: #fff;
     transition: background-color 0.2s;
+    font-size: 0.95em;
   }
-  /* Efecto cebra y hover */
   .grid-row-trigger:hover .grid-cell { background-color: #FFF8E1 !important; }
-  .schedule-grid > .grid-row-trigger:nth-of-type(4n+3) .grid-cell { background-color: #F1F8E9; }
-
-  /* Estilos de contenido de celda */
-  .time-badge { background-color: #C62828; color: white; padding: 5px 10px; border-radius: 15px; font-weight: bold; font-size: 0.85em; white-space: nowrap; }
-  .activity-name { font-weight: 700; font-size: 1.05em; color: #333; }
+  /* Alternancia de colores (zebra) se maneja diferente en JS columns, pero dejamos esto por si acaso */
+  
+  .time-badge { background-color: #C62828; color: white; padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.8em; white-space: nowrap; }
+  .activity-name { font-weight: 700; color: #333; }
   .place-name { color: #666; font-style: italic; }
 
-  /* --- 5. PANEL DE DETALLES (ACORDEÓN) --- */
+  /* --- 5. DETALLES --- */
   .detail-panel {
     grid-column: 1 / -1; 
     background-color: #f9fbe7;
     border-bottom: 2px solid #C62828;
     max-height: 0; 
     overflow: hidden;
-    transition: all 0.3s ease-out;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s;
     opacity: 0;
   }
   .detail-panel.active {
-    padding: 20px;
+    padding: 15px;
     max-height: 500px;
     opacity: 1;
     border-left: 5px solid #2E7D32;
   }
-  .detail-content { padding-left: 15px; }
-  .detail-item { margin-bottom: 10px; display: flex; align-items: center; flex-wrap: wrap;}
-  .detail-icon { margin-right: 10px; font-size: 1.3em; }
-  strong { color: #2E7D32; }
-
-  /* Botones de Enlaces */
+  .detail-item { margin-bottom: 5px; display: flex; align-items: center; flex-wrap: wrap;}
+  .detail-icon { margin-right: 8px; font-size: 1.2em; }
+  
   .action-button {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #C62828;
-    color: white;
-    text-decoration: none;
-    border-radius: 25px;
-    font-weight: bold;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-    transition: transform 0.2s, background-color 0.2s;
+    display: inline-block; margin-top: 5px; padding: 8px 15px;
+    background-color: #C62828; color: white; text-decoration: none;
+    border-radius: 20px; font-weight: bold; font-size: 0.9em;
     border: none; cursor: pointer;
   }
-  .action-button:hover {
-    background-color: #b71c1c;
-    transform: translateY(-2px);
-  }
+  .action-button:hover { background-color: #b71c1c; transform: translateY(-2px); }
   .map-button { background-color: #1976D2; }
   .map-button:hover { background-color: #1565C0; }
+  .filtered-out { display: none !important; }
 
-  /* --- 6. CLASE PARA FILTRADO --- */
-  .filtered-out {
-    display: none !important;
+  /* ==========================================================================
+     NUEVO: ESTILOS PARA ESCRITORIO (WEB) - DOBLE COLUMNA Y ANIMACIÓN
+     ========================================================================== */
+  @media screen and (min-width: 1024px) {
+    /* 1. Estirar el contenedor principal */
+    .main-container {
+        max-width: 98%; /* Ocupa casi toda la pantalla */
+        margin: 10px auto;
+        border: none; /* Quitamos borde exterior para look "full screen" o lo dejamos a gusto */
+        border-top: 3px solid #C62828; /* Mantenemos borde arriba */
+    }
+
+    /* 2. Filtros estirados */
+    .filter-bar {
+        justify-content: space-between; /* Estira los elementos */
+    }
+
+    /* 3. Contenedor dividido (Generado por JS) */
+    #desktop-split-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Dos columnas iguales (50% - 50%) */
+        gap: 20px; /* Espacio entre las dos columnas */
+        padding: 20px;
+        background-color: white;
+    }
+
+    /* Columna Izquierda */
+    .split-col-left {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    /* Columna Derecha con la ANIMACIÓN DE SLEEP/TRANSICIÓN */
+    .split-col-right {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        
+        /* ESTA ES LA MAGIA DE LA ANIMACIÓN */
+        opacity: 0; /* Empieza invisible */
+        /* NombreAnimación | Duración | Curva | Retardo(Sleep) | EstadoFinal */
+        animation: slideInFade 0.8s ease-out 1s forwards; 
+    }
+
+    /* Ajuste de la grid interna cuando está dividida */
+    .schedule-grid {
+        /* Se adapta al ancho de su columna padre */
+    }
   }
 
-  /* --- 7. RESPONSIVE (MÓVIL) --- */
+  /* Animación para la columna derecha */
+  @keyframes slideInFade {
+      from {
+          opacity: 0;
+          transform: translateX(20px); /* Viene un poco de la derecha */
+      }
+      to {
+          opacity: 1;
+          transform: translateX(0);
+      }
+  }
+
+  /* --- MÓVIL (Mantiene diseño original) --- */
   @media screen and (max-width: 768px) {
     .curved-text { font-size: 38px; }
     .filter-bar { flex-direction: column; gap: 10px; }
-    .filter-input-group { min-width: 100%; }
     .schedule-grid { grid-template-columns: 1fr; }
-    .grid-header { display: none; }
-    
-    .grid-cell {
-        border-right: none;
-        padding: 8px 15px;
-    }
+    .grid-header { display: none; } /* Ocultar cabecera verde en móvil */
+    .grid-cell { border-right: none; padding: 8px 15px; }
     .grid-row-trigger .grid-cell:first-child { padding-top: 15px; }
     .grid-row-trigger .grid-cell:last-child { padding-bottom: 15px; border-bottom: 2px solid #ddd; }
     .activity-name { font-size: 1.2em; }
+    
+    /* Desactivar el wrapper de escritorio si se redimensiona */
+    #desktop-split-wrapper {
+        display: block; /* Volver a flujo normal si falla algo */
+    }
   }
 </style>
 </head>
@@ -238,7 +274,7 @@
         </text>
     </svg>
     <h2 class="subtitle-striking">🎄 Gran Fiesta de Navidad 🎅</h2>
-    <div style="color: #fff; font-weight: bold;">¡Haz clic en las filas para ver detalles y enlaces!</div>
+    <div style="color: #fff; font-weight: bold; font-size: 0.9em;">¡Haz clic en las filas para ver detalles!</div>
   </div>
 
   <div class="filter-bar">
@@ -260,134 +296,221 @@
     </div>
   </div>
 
-  <div class="schedule-grid" id="schedule-grid-container">
-    <div class="grid-header">
-      <div class="grid-header-cell">Horario</div>
-      <div class="grid-header-cell">Actividad</div>
-      <div class="grid-header-cell">Lugar</div>
-    </div>
+  <div id="original-content-wrapper">
+      <div class="schedule-grid" id="schedule-grid-container">
+        <div class="grid-header" id="master-header">
+          <div class="grid-header-cell">Horario</div>
+          <div class="grid-header-cell">Actividad</div>
+          <div class="grid-header-cell">Lugar</div>
+        </div>
 
-    <div class="grid-row-trigger js-filterable" data-time="09:00" data-place="Hall del ACE">
-      <div class="grid-cell"><span class="time-badge">09:00 - 10:00</span></div>
-      <div class="grid-cell"><span class="activity-name">☕ Chocolatada</span></div>
-      <div class="grid-cell"><span class="place-name">Hall del ACE</span></div>
-    </div>
-    <div class="detail-panel"><div class="detail-content">
-      <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>1º, 2º PPME Jardinería</strong></div>
-    </div></div>
+        <div class="grid-row-trigger js-filterable" data-time="09:00" data-place="Hall del ACE">
+          <div class="grid-cell"><span class="time-badge">09:00 - 10:00</span></div>
+          <div class="grid-cell"><span class="activity-name">☕ Chocolatada</span></div>
+          <div class="grid-cell"><span class="place-name">Hall del ACE</span></div>
+        </div>
+        <div class="detail-panel"><div class="detail-content">
+          <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>1º, 2º PPME Jardinería</strong></div>
+        </div></div>
 
-    <div class="grid-row-trigger js-filterable" data-time="09:30" data-place="Aula B.3">
-      <div class="grid-cell"><span class="time-badge">09:30 - 10:30</span></div>
-      <div class="grid-cell"><span class="activity-name">🕵️‍♂️ Juego del Impostor</span></div>
-      <div class="grid-cell"><span class="place-name">Aula B.3</span></div>
-    </div>
-    <div class="detail-panel"><div class="detail-content">
-       <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>1º DAW Bilingüe</strong></div>
-    </div></div>
+        <div class="grid-row-trigger js-filterable" data-time="09:30" data-place="Aula B.3">
+          <div class="grid-cell"><span class="time-badge">09:30 - 10:30</span></div>
+          <div class="grid-cell"><span class="activity-name">🕵️‍♂️ Juego del Impostor</span></div>
+          <div class="grid-cell"><span class="place-name">Aula B.3</span></div>
+        </div>
+        <div class="detail-panel"><div class="detail-content">
+           <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>1º DAW Bilingüe</strong></div>
+        </div></div>
 
-    <div class="grid-row-trigger js-filterable" data-time="09:30" data-place="Gimnasio">
-      <div class="grid-cell"><span class="time-badge">09:30 - 11:15</span></div>
-      <div class="grid-cell"><span class="activity-name">🌟 Got Talent (Festival)</span></div>
-      <div class="grid-cell"><span class="place-name">Gimnasio</span></div>
-    </div>
-    <div class="detail-panel"><div class="detail-content">
-        <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>Ciclo TSEAS (1º y 2º)</strong></div>
-    </div></div>
+        <div class="grid-row-trigger js-filterable" data-time="09:30" data-place="Gimnasio">
+          <div class="grid-cell"><span class="time-badge">09:30 - 11:15</span></div>
+          <div class="grid-cell"><span class="activity-name">🌟 Got Talent (Festival)</span></div>
+          <div class="grid-cell"><span class="place-name">Gimnasio</span></div>
+        </div>
+        <div class="detail-panel"><div class="detail-content">
+            <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>Ciclo TSEAS (1º y 2º)</strong></div>
+        </div></div>
 
-    <div class="grid-row-trigger js-filterable" data-time="09:30" data-place="Aula 2.6">
-      <div class="grid-cell"><span class="time-badge">09:30 - 11:30</span></div>
-      <div class="grid-cell"><span class="activity-name">🎰 Casino Online</span></div>
-      <div class="grid-cell"><span class="place-name">Aula 2.6</span></div>
-    </div>
-    <div class="detail-panel"><div class="detail-content">
-        <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>1º DAM</strong></div>
-    </div></div>
+        <div class="grid-row-trigger js-filterable" data-time="09:30" data-place="Aula 2.6">
+          <div class="grid-cell"><span class="time-badge">09:30 - 11:30</span></div>
+          <div class="grid-cell"><span class="activity-name">🎰 Casino Online</span></div>
+          <div class="grid-cell"><span class="place-name">Aula 2.6</span></div>
+        </div>
+        <div class="detail-panel"><div class="detail-content">
+            <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>1º DAM</strong></div>
+        </div></div>
 
-    <div class="grid-row-trigger js-filterable" data-time="10:00" data-place="Aula B.5">
-      <div class="grid-cell"><span class="time-badge">10:00 - 10:30</span></div>
-      <div class="grid-cell"><span class="activity-name">🎤 Batalla de Gallos</span></div>
-      <div class="grid-cell"><span class="place-name">Aula B.5</span></div>
-    </div>
-    <div class="detail-panel"><div class="detail-content">
-      <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>2º SMR</strong></div>
-      <div class="detail-item">¡Demuestra tu talento! Inscríbete para participar.</div>
-      <a href="https://forms.gle/VCT2gh9hTaQYD5fC7" target="_blank" class="action-button">📝 Formulario de Inscripción</a>
-    </div></div>
+        <div class="grid-row-trigger js-filterable" data-time="09:30" data-place="B11">
+            <div class="grid-cell"><span class="time-badge">09:30 - 11:30</span></div>
+            <div class="grid-cell"><span class="activity-name">🎵 Bingo musical</span></div>
+            <div class="grid-cell"><span class="place-name">Aula B11</span></div>
+          </div>
+          <div class="detail-panel"><div class="detail-content">
+            <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>1º A E Infantil</strong></div>
+          </div></div>
+      
+          <div class="grid-row-trigger js-filterable" data-time="09:30" data-place="2.2">
+            <div class="grid-cell"><span class="time-badge">09:30 - 11:30</span></div>
+            <div class="grid-cell"><span class="activity-name">🧵 Taller de pulseras y premios</span></div>
+            <div class="grid-cell"><span class="place-name">Aula 2.2</span></div>
+          </div>
+          <div class="detail-panel"><div class="detail-content">
+            <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>2º APSD</strong></div>
+            <div class="detail-item">“Impostor navideño con premio”</div>
+          </div></div>
+      
+          <div class="grid-row-trigger js-filterable" data-time="09:30" data-place="2.4">
+            <div class="grid-cell"><span class="time-badge">09:30 - 11:30</span></div>
+            <div class="grid-cell"><span class="activity-name">🎤 Karaoke</span></div>
+            <div class="grid-cell"><span class="place-name">Aula 2.4</span></div>
+          </div>
+          <div class="detail-panel"><div class="detail-content">
+            <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>1ºB E Infantil</strong></div>
+          </div></div>
+      
+          <div class="grid-row-trigger js-filterable" data-time="09:30" data-place="1.18">
+            <div class="grid-cell"><span class="time-badge">09:30 - 11:30</span></div>
+            <div class="grid-cell"><span class="activity-name">🕺 Discopio</span></div>
+            <div class="grid-cell"><span class="place-name">Aula 1.18</span></div>
+          </div>
+          <div class="detail-panel"><div class="detail-content">
+            <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>2º E Infantil</strong></div>
+          </div></div>
+      
+          <div class="grid-row-trigger js-filterable" data-time="09:30" data-place="1.4">
+            <div class="grid-cell"><span class="time-badge">09:30 - 11:30</span></div>
+            <div class="grid-cell"><span class="activity-name">💃 Karaoke + Justdance</span></div>
+            <div class="grid-cell"><span class="place-name">Aula 1.4</span></div>
+          </div>
+          <div class="detail-panel"><div class="detail-content">
+            <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>1º Integración Social</strong></div>
+          </div></div>
+      
+          <div class="grid-row-trigger js-filterable" data-time="09:30" data-place="2.2">
+            <div class="grid-cell"><span class="time-badge">09:30 - 11:30</span></div>
+            <div class="grid-cell"><span class="activity-name">🤟 Villancicos lengua de signos</span></div>
+            <div class="grid-cell"><span class="place-name">Aula 2.2</span></div>
+          </div>
+          <div class="detail-panel"><div class="detail-content">
+            <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>1º Mediación Comunicativa</strong></div>
+          </div></div>
+      
+          <div class="grid-row-trigger js-filterable" data-time="09:30" data-place="B13">
+            <div class="grid-cell"><span class="time-badge">09:30 - 11:30</span></div>
+            <div class="grid-cell"><span class="activity-name">🎄 Árbol deseos / Just dance</span></div>
+            <div class="grid-cell"><span class="place-name">Aula B13</span></div>
+          </div>
+          <div class="detail-panel"><div class="detail-content">
+            <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>1º APSD</strong></div>
+            <div class="detail-item">Just dance con premios navideños</div>
+          </div></div>
+      
+          <div class="grid-row-trigger js-filterable" data-time="09:30" data-place="1.16">
+            <div class="grid-cell"><span class="time-badge">09:30 - 11:30</span></div>
+            <div class="grid-cell"><span class="activity-name">🎶 “Cantas y te la sabes”</span></div>
+            <div class="grid-cell"><span class="place-name">Aula 1.16</span></div>
+          </div>
+          <div class="detail-panel"><div class="detail-content">
+            <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>2ºA EI</strong></div>
+          </div></div>
+      
+          <div class="grid-row-trigger js-filterable" data-time="09:30" data-place="1.2">
+            <div class="grid-cell"><span class="time-badge">09:30 - 11:30</span></div>
+            <div class="grid-cell"><span class="activity-name">🌚 La Noche Oscura (Pueblo duerme)</span></div>
+            <div class="grid-cell"><span class="place-name">Aula 1.2</span></div>
+          </div>
+          <div class="detail-panel"><div class="detail-content">
+            <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>1ºA Int. Social</strong></div>
+            <div class="detail-item">Versión Navideña</div>
+          </div></div>
 
-    <div class="grid-row-trigger js-filterable" data-time="10:00" data-place="1.14">
-      <div class="grid-cell"><span class="time-badge">10:00 - 12:00</span></div>
-      <div class="grid-cell"><span class="activity-name">🏷️ Adivina la marca / Tabú</span></div>
-      <div class="grid-cell"><span class="place-name">Aula 1.14</span></div>
-    </div>
-    <div class="detail-panel"><div class="detail-content">
-        <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>2º CI</strong></div>
-    </div></div>
+        <div class="grid-row-trigger js-filterable" data-time="10:00" data-place="Aula B.5">
+          <div class="grid-cell"><span class="time-badge">10:00 - 10:30</span></div>
+          <div class="grid-cell"><span class="activity-name">🎤 Batalla de Gallos</span></div>
+          <div class="grid-cell"><span class="place-name">Aula B.5</span></div>
+        </div>
+        <div class="detail-panel"><div class="detail-content">
+          <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>2º SMR</strong></div>
+          <div class="detail-item">¡Demuestra tu talento! Inscríbete para participar.</div>
+          <a href="https://forms.gle/VCT2gh9hTaQYD5fC7" target="_blank" class="action-button">📝 Formulario de Inscripción</a>
+        </div></div>
 
-     <div class="grid-row-trigger js-filterable" data-time="10:00" data-place="1.12">
-        <div class="grid-cell"><span class="time-badge">10:00 - 12:00</span></div>
-        <div class="grid-cell"><span class="activity-name">🌍 Kahoot Viaje por el mundo</span></div>
-        <div class="grid-cell"><span class="place-name">Aula 1.12</span></div>
+        <div class="grid-row-trigger js-filterable" data-time="10:00" data-place="1.14">
+          <div class="grid-cell"><span class="time-badge">10:00 - 12:00</span></div>
+          <div class="grid-cell"><span class="activity-name">🏷️ Adivina la marca / Tabú</span></div>
+          <div class="grid-cell"><span class="place-name">Aula 1.14</span></div>
+        </div>
+        <div class="detail-panel"><div class="detail-content">
+            <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>2º CI</strong></div>
+        </div></div>
+
+         <div class="grid-row-trigger js-filterable" data-time="10:00" data-place="1.12">
+            <div class="grid-cell"><span class="time-badge">10:00 - 12:00</span></div>
+            <div class="grid-cell"><span class="activity-name">🌍 Kahoot Viaje por el mundo</span></div>
+            <div class="grid-cell"><span class="place-name">Aula 1.12</span></div>
+          </div>
+          <div class="detail-panel"><div class="detail-content">
+              <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>1 CI</strong></div>
+          </div></div>
+
+        <div class="grid-row-trigger js-filterable" data-time="10:00" data-place="1.8">
+          <div class="grid-cell"><span class="time-badge">10:00 - 12:00</span></div>
+          <div class="grid-cell"><span class="activity-name">🕵️‍♀️ Juego El Impostor</span></div>
+          <div class="grid-cell"><span class="place-name">Aula 1.8</span></div>
+        </div>
+        <div class="detail-panel"><div class="detail-content">
+            <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>2 GM Act. Comerciales</strong></div>
+        </div></div>
+
+        <div class="grid-row-trigger js-filterable" data-time="10:00" data-place="1.10">
+            <div class="grid-cell"><span class="time-badge">10:00 - 12:00</span></div>
+            <div class="grid-cell"><span class="activity-name">🙈 Juego Manos Ciegas</span></div>
+            <div class="grid-cell"><span class="place-name">Aula 1.10</span></div>
+          </div>
+          <div class="detail-panel"><div class="detail-content">
+              <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>1 GM Act. Comerciales</strong></div>
+          </div></div>
+
+        <div class="grid-row-trigger js-filterable" data-time="10:00" data-place="1.9 - 1.11">
+          <div class="grid-cell"><span class="time-badge">10:00 - 12:00</span></div>
+          <div class="grid-cell"><span class="activity-name">🎶 Karaoke</span></div>
+          <div class="grid-cell"><span class="place-name">Aula 1.9 - 1.11</span></div>
+        </div>
+        <div class="detail-panel"><div class="detail-content">
+            <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>2 FB Serv. Comerciales</strong></div>
+        </div></div>
+
+        <div class="grid-row-trigger js-filterable" data-time="11:45" data-place="Calle Lateral">
+          <div class="grid-cell"><span class="time-badge">11:45 - 12:30</span></div>
+          <div class="grid-cell"><span class="activity-name">👑 Cabalgata</span></div>
+          <div class="grid-cell"><span class="place-name">Calle Lateral del Centro</span></div>
+        </div>
+        <div class="detail-panel"><div class="detail-content">
+          <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>Ciclo TSEAS</strong></div>
+          <div class="detail-item">¡No te pierdas el gran desfile!</div>
+          <a href="https://maps.app.goo.gl/nrKx5KtrSPZdWkKU6" target="_blank" class="action-button map-button">📍 Ver Ubicación en Maps</a>
+        </div></div>
+
+        <div class="grid-row-trigger js-filterable" data-time="Varios" data-place="Gimnasio">
+          <div class="grid-cell"><span class="time-badge" style="background-color: #2E7D32;">Durante la mañana</span></div>
+          <div class="grid-cell"><span class="activity-name">🎭 Actuaciones Varias (1-7)</span></div>
+          <div class="grid-cell"><span class="place-name">Gimnasio</span></div>
+        </div>
+        <div class="detail-panel"><div class="detail-content">
+          <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>Ciclo TSEAS</strong></div>
+          <div class="detail-item"><span class="detail-icon">⏰</span>Estas actuaciones tendrán lugar a lo largo de la mañana en el gimnasio, intercaladas con el festival principal.</div>
+        </div></div>
       </div>
-      <div class="detail-panel"><div class="detail-content">
-          <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>1 CI</strong></div>
-      </div></div>
+  </div> 
+</div> 
 
-    <div class="grid-row-trigger js-filterable" data-time="10:00" data-place="1.8">
-      <div class="grid-cell"><span class="time-badge">10:00 - 12:00</span></div>
-      <div class="grid-cell"><span class="activity-name">🕵️‍♀️ Juego El Impostor</span></div>
-      <div class="grid-cell"><span class="place-name">Aula 1.8</span></div>
-    </div>
-    <div class="detail-panel"><div class="detail-content">
-        <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>2 GM Act. Comerciales</strong></div>
-    </div></div>
-
-    <div class="grid-row-trigger js-filterable" data-time="10:00" data-place="1.10">
-        <div class="grid-cell"><span class="time-badge">10:00 - 12:00</span></div>
-        <div class="grid-cell"><span class="activity-name">🙈 Juego Manos Ciegas</span></div>
-        <div class="grid-cell"><span class="place-name">Aula 1.10</span></div>
-      </div>
-      <div class="detail-panel"><div class="detail-content">
-          <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>1 GM Act. Comerciales</strong></div>
-      </div></div>
-
-    <div class="grid-row-trigger js-filterable" data-time="10:00" data-place="1.9 - 1.11">
-      <div class="grid-cell"><span class="time-badge">10:00 - 12:00</span></div>
-      <div class="grid-cell"><span class="activity-name">🎶 Karaoke</span></div>
-      <div class="grid-cell"><span class="place-name">Aula 1.9 - 1.11</span></div>
-    </div>
-    <div class="detail-panel"><div class="detail-content">
-        <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>2 FB Serv. Comerciales</strong></div>
-    </div></div>
-
-    <div class="grid-row-trigger js-filterable" data-time="11:45" data-place="Calle Lateral">
-      <div class="grid-cell"><span class="time-badge">11:45 - 12:30</span></div>
-      <div class="grid-cell"><span class="activity-name">👑 Cabalgata</span></div>
-      <div class="grid-cell"><span class="place-name">Calle Lateral del Centro</span></div>
-    </div>
-    <div class="detail-panel"><div class="detail-content">
-      <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>Ciclo TSEAS</strong></div>
-      <div class="detail-item">¡No te pierdas el gran desfile!</div>
-      <a href="https://maps.app.goo.gl/nrKx5KtrSPZdWkKU6" target="_blank" class="action-button map-button">📍 Ver Ubicación en Maps</a>
-    </div></div>
-
-    <div class="grid-row-trigger js-filterable" data-time="Varios" data-place="Gimnasio">
-      <div class="grid-cell"><span class="time-badge" style="background-color: #2E7D32;">Durante la mañana</span></div>
-      <div class="grid-cell"><span class="activity-name">🎭 Actuaciones Varias (1-7)</span></div>
-      <div class="grid-cell"><span class="place-name">Gimnasio</span></div>
-    </div>
-    <div class="detail-panel"><div class="detail-content">
-      <div class="detail-item"><span class="detail-icon">👥</span>Grupo: <strong>Ciclo TSEAS</strong></div>
-      <div class="detail-item"><span class="detail-icon">⏰</span>Estas actuaciones tendrán lugar a lo largo de la mañana en el gimnasio, intercaladas con el festival principal.</div>
-    </div></div>
-
-  </div> </div> <script>
+<script>
   document.addEventListener('DOMContentLoaded', function() {
     
-    // 1. LOGICA DEL ACORDEÓN
+    // --- LÓGICA DE INTERACTIVIDAD (ACORDEÓN) ---
     const triggers = document.querySelectorAll('.grid-row-trigger');
     triggers.forEach(trigger => {
       trigger.addEventListener('click', () => {
-        // Opcional: Cerrar otros paneles al abrir uno nuevo
         const activeTriggers = document.querySelectorAll('.grid-row-trigger.active-row');
         activeTriggers.forEach(at => {
             if(at !== trigger) {
@@ -402,7 +525,7 @@
       });
     });
 
-    // 2. LÓGICA DE FILTRADO
+    // --- LÓGICA DE FILTRADO ---
     const filterTimeSelect = document.getElementById('filter-time');
     const filterActivityInput = document.getElementById('filter-activity');
     const filterPlaceSelect = document.getElementById('filter-place');
@@ -459,6 +582,85 @@
     filterTimeSelect.addEventListener('change', filterGrid);
     filterActivityInput.addEventListener('input', filterGrid);
     filterPlaceSelect.addEventListener('change', filterGrid);
+
+    // --- NUEVO: LÓGICA PARA DIVIDIR EN COLUMNAS EN ESCRITORIO ---
+    function splitLayoutForDesktop() {
+        // Solo ejecutar si la pantalla es ancha (> 1024px)
+        if (window.innerWidth < 1024) return;
+
+        const originalWrapper = document.getElementById('original-content-wrapper');
+        const gridContainer = document.getElementById('schedule-grid-container');
+        
+        // Si ya lo hicimos, no repetir
+        if(document.getElementById('desktop-split-wrapper')) return;
+
+        // Crear contenedor Grid de 2 columnas
+        const splitWrapper = document.createElement('div');
+        splitWrapper.id = 'desktop-split-wrapper';
+
+        // Columnas
+        const colLeft = document.createElement('div');
+        colLeft.className = 'split-col-left schedule-grid';
+        
+        const colRight = document.createElement('div');
+        colRight.className = 'split-col-right schedule-grid';
+
+        // Obtener el Header Maestro
+        const masterHeader = document.getElementById('master-header');
+        
+        // Clonar Header para ambas columnas
+        const headerLeft = masterHeader.cloneNode(true);
+        const headerRight = masterHeader.cloneNode(true);
+        headerRight.style.display = 'contents'; // Asegurar display correcto
+        headerLeft.style.display = 'contents';
+
+        colLeft.appendChild(headerLeft);
+        colRight.appendChild(headerRight);
+
+        // Recoger todos los pares (trigger + panel)
+        const allTriggers = Array.from(document.querySelectorAll('.js-filterable'));
+        const totalItems = allTriggers.length;
+        const midPoint = Math.ceil(totalItems / 2);
+
+        // Mover elementos a las columnas correspondientes
+        allTriggers.forEach((trigger, index) => {
+            const panel = trigger.nextElementSibling; // El panel de detalles
+            
+            if (index < midPoint) {
+                colLeft.appendChild(trigger);
+                colLeft.appendChild(panel);
+            } else {
+                colRight.appendChild(trigger);
+                colRight.appendChild(panel);
+            }
+        });
+
+        // Insertar las columnas en el wrapper
+        splitWrapper.appendChild(colLeft);
+        splitWrapper.appendChild(colRight);
+
+        // Ocultar el grid original y añadir el nuevo
+        gridContainer.style.display = 'none';
+        originalWrapper.appendChild(splitWrapper);
+    }
+
+    // Ejecutar al cargar
+    splitLayoutForDesktop();
+
+    // Reajustar si cambian el tamaño de ventana
+    window.addEventListener('resize', () => {
+        if(window.innerWidth < 1024) {
+             const splitWrapper = document.getElementById('desktop-split-wrapper');
+             if(splitWrapper) {
+                 // Si se hace pequeño, podríamos necesitar recargar la página para restaurar
+                 // o mover los elementos de vuelta. Para simplificar, recargamos si se pasa de desktop a movil
+                 // location.reload(); // Opcional
+             }
+        } else {
+            splitLayoutForDesktop();
+        }
+    });
+
   });
 </script>
 
